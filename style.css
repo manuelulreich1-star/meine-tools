@@ -1,0 +1,272 @@
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  will-change: transform;
+}
+
+body::before {
+  width: 620px;
+  height: 620px;
+  top: -160px;
+  left: -160px;
+  background: var(--accent);
+  animation: drift-a 24s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 560px;
+  height: 560px;
+  bottom: -160px;
+  right: -140px;
+  background: var(--accent-2);
+  animation: drift-b 28s ease-in-out infinite alternate;
+}
+
+@media (prefers-color-scheme: dark) {
+  body::before,
+  body::after {
+    opacity: 0.45;
+  }
+}
+
+@keyframes drift-a {
+  from { transform: translate(0, 0); }
+  to { transform: translate(110px, 90px); }
+}
+
+@keyframes drift-b {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-100px, -70px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 56px 20px 60px;
+}
+
+.hub-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hub-header h1 {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin: 0;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding: 18px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(135deg, rgba(91, 108, 240, 0.55), rgba(139, 92, 246, 0.55)) border-box;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  cursor: pointer;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+
+.tool-card:hover {
+  box-shadow: var(--shadow-hover), 0 0 20px rgba(91, 108, 240, 0.35), 0 0 44px rgba(139, 92, 246, 0.2);
+  transform: translateY(-4px) scale(1.03);
+}
+
+.tool-card-planned {
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  cursor: default;
+  opacity: 0.55;
+}
+
+.tool-card-planned:hover {
+  box-shadow: var(--shadow);
+  transform: none;
+}
+
+.tool-icon {
+  font-size: 28px;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.tool-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tool-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tool-title-row h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.status-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex: none;
+}
+
+.status-active {
+  color: #2fa66a;
+  background: rgba(47, 166, 106, 0.12);
+}
+
+.status-planned {
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.tool-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 6px 0 10px;
+  line-height: 1.4;
+}
+
+.tool-category {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+/* Benachrichtigungs-Zähler (wie bei App-Icons) */
+.tool-card.has-news .status-badge { margin-right: 12px; }
+
+.notify-badge {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 26px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  border: 2.5px solid var(--bg);
+  box-sizing: content-box;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.45);
+  z-index: 2;
+}
+
+.notify-badge[hidden] { display: none; }
+
+/* Sanft pulsierender Ring, damit neue Zahlen auffallen */
+.notify-badge::after {
+  content: "";
+  position: absolute;
+  inset: -2.5px;
+  border-radius: inherit;
+  border: 2px solid #ef4444;
+  animation: badge-pulse 2s ease-out infinite;
+  pointer-events: none;
+}
+
+.notify-badge.pop {
+  animation: badge-pop .45s cubic-bezier(.3, 1.6, .5, 1);
+}
+
+@keyframes badge-pulse {
+  0% { transform: scale(1); opacity: .8; }
+  70%, 100% { transform: scale(1.7); opacity: 0; }
+}
+
+@keyframes badge-pop {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notify-badge::after { animation: none; opacity: 0; }
+  .notify-badge.pop { animation: none; }
+}
+
+.tool-news {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: -2px 0 10px;
+}
+
+.tool-news[hidden] { display: none; }
+
+.news-item {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: var(--accent);
+  background: rgba(91, 108, 240, 0.12);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-item.urgent {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+}

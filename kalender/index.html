@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/; connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="../shared/schutz.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mein Kalender</title>
+<link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <a href="../index.html" class="back-link">&#8592; Übersicht</a>
+    <header class="toolbar">
+      <div class="toolbar-left">
+        <button id="prevBtn" class="icon-btn" aria-label="Vorheriger Monat">&#8592;</button>
+        <button id="todayBtn" class="today-btn">Heute</button>
+        <button id="nextBtn" class="icon-btn" aria-label="Nächster Monat">&#8594;</button>
+      </div>
+      <h1 id="monthLabel" class="gradient-title"></h1>
+      <div class="toolbar-right">
+        <button id="viewToggleBtn" class="today-btn view-toggle" aria-pressed="false">Jahr</button>
+        <input id="searchInput" type="search" placeholder="Termine suchen…" />
+      </div>
+    </header>
+
+    <div class="legend">
+      <span class="legend-item"><span class="dot dot-high"></span>Hohe Priorität</span>
+      <span class="legend-item"><span class="dot dot-medium"></span>Mittlere Priorität</span>
+      <span class="legend-item"><span class="dot dot-low"></span>Niedrige Priorität</span>
+      <span class="legend-item"><span class="swatch swatch-holiday"></span>Feiertag (BW)</span>
+      <span class="legend-item"><span class="swatch swatch-ferien"></span>Schulferien (BW)</span>
+    </div>
+
+    <div id="monthView">
+      <div class="weekdays" id="weekdays"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div id="yearView" class="year-grid" hidden></div>
+  </div>
+
+  <!-- Tagesansicht -->
+  <dialog id="dayDialog">
+    <div class="day-view">
+      <header class="day-view-header">
+        <button type="button" id="dayPrevBtn" class="icon-btn" aria-label="Vorheriger Tag">&#8592;</button>
+        <div class="day-view-title">
+          <h2 id="dayTitle"></h2>
+          <div id="dayInfo" class="day-info"></div>
+        </div>
+        <button type="button" id="dayNextBtn" class="icon-btn" aria-label="Nächster Tag">&#8594;</button>
+      </header>
+      <div id="dayAllDay" class="day-allday"></div>
+      <div id="dayTimeline" class="timeline"></div>
+      <div class="dialog-actions day-view-actions">
+        <button type="button" id="dayAddBtn" class="primary-btn">+ Termin</button>
+        <span class="spacer"></span>
+        <button type="button" id="dayCloseBtn" class="ghost-btn">Schließen</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Event Dialog -->
+  <dialog id="eventDialog">
+    <form id="eventForm" method="dialog">
+      <h2 id="dialogTitle">Termin hinzufügen</h2>
+      <input type="hidden" id="eventId">
+      <input type="hidden" id="eventDate">
+
+      <label>Titel
+        <input type="text" id="eventTitle" required maxlength="80" placeholder="z. B. Zahnarzt">
+      </label>
+
+      <div class="row">
+        <label>Von
+          <input type="time" id="eventTime">
+        </label>
+        <label>Bis (optional)
+          <input type="time" id="eventEndTime">
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Farbe
+          <select id="eventColor">
+            <option value="blue">Blau</option>
+            <option value="green">Grün</option>
+            <option value="orange">Orange</option>
+            <option value="pink">Pink</option>
+            <option value="purple">Lila</option>
+          </select>
+        </label>
+        <label>Priorität
+          <select id="eventPriority">
+            <option value="low">Niedrig</option>
+            <option value="medium" selected>Mittel</option>
+            <option value="high">Hoch</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Wiederholung
+          <select id="eventRecurrence">
+            <option value="none">Keine</option>
+            <option value="daily">Täglich</option>
+            <option value="weekly">Wöchentlich</option>
+            <option value="monthly">Monatlich</option>
+            <option value="yearly">Jährlich</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row" id="recurrenceOptions" hidden>
+        <label>Intervall
+          <input type="number" id="eventInterval" min="1" max="52" value="1">
+        </label>
+        <label>Wiederholen bis (optional)
+          <input type="date" id="eventUntil">
+        </label>
+      </div>
+
+      <label>Notiz
+        <textarea id="eventNote" maxlength="300" rows="3" placeholder="Optional…"></textarea>
+      </label>
+
+      <p id="seriesHint" class="series-hint" hidden>Änderungen und Löschen betreffen die gesamte Serie.</p>
+
+      <div class="dialog-actions">
+        <button type="button" id="deleteBtn" class="danger-btn" hidden>Löschen</button>
+        <span class="spacer"></span>
+        <button type="button" id="cancelBtn" class="ghost-btn">Abbrechen</button>
+        <button type="submit" class="primary-btn">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="../shared/sync-config.js"></script>
+  <script src="../shared/sync.js"></script>
+  <script src="feiertage.js"></script>
+  <script src="vorlagen.js"></script>
+  <script src="vorlagen.lokal.js"></script>
+  <script src="daten.js"></script>
+  <script src="../fitness/vorlagen.js"></script>
+  <script src="../fitness/daten.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

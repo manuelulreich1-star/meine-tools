@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/; connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="../shared/schutz.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#5b6cf0">
+<title>Fitnessplaner</title>
+<link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="fit-header">
+      <a href="../index.html" class="back-link" aria-label="Zur Übersicht">&#8592;</a>
+      <h1 class="gradient-title" id="viewTitle">Heute</h1>
+      <div class="fit-sync" data-sync-slot></div>
+      <button type="button" id="settingsBtn" class="icon-btn" aria-label="Einstellungen">⚙️</button>
+    </header>
+
+    <main>
+      <section id="view-heute" class="view" data-title="Heute"></section>
+      <section id="view-plan" class="view" data-title="Trainingsplan" hidden></section>
+      <section id="view-ernaehrung" class="view" data-title="Ernährung" hidden></section>
+      <section id="view-koerper" class="view" data-title="Körper" hidden></section>
+      <section id="view-statistik" class="view" data-title="Statistik" hidden></section>
+    </main>
+  </div>
+
+  <nav class="tabbar" aria-label="Bereiche">
+    <button type="button" class="tab" data-view="heute"><span class="tab-icon">🏠</span>Heute</button>
+    <button type="button" class="tab" data-view="plan"><span class="tab-icon">📋</span>Plan</button>
+    <button type="button" class="tab" data-view="ernaehrung"><span class="tab-icon">🍽️</span>Ernährung</button>
+    <button type="button" class="tab" data-view="koerper"><span class="tab-icon">⚖️</span>Körper</button>
+    <button type="button" class="tab" data-view="statistik"><span class="tab-icon">📈</span>Statistik</button>
+  </nav>
+
+  <!-- Laufendes Training (Vollbild) -->
+  <section id="live" class="live" hidden aria-label="Laufendes Training">
+    <header class="live-header">
+      <button type="button" id="liveMinimize" class="icon-btn" aria-label="Minimieren – Training läuft weiter">←</button>
+      <div class="live-title">
+        <strong id="liveName"></strong>
+        <span id="liveClock" class="live-clock">0:00</span>
+      </div>
+      <button type="button" id="liveFinish" class="primary-btn">Beenden</button>
+    </header>
+    <div id="liveProgress" class="live-progress"><span></span></div>
+    <div id="liveBody" class="live-body"></div>
+    <div id="restBar" class="rest-bar" hidden>
+      <div class="rest-fill"></div>
+      <div class="rest-content">
+        <button type="button" id="restMinus" class="rest-btn">−15</button>
+        <div class="rest-center">
+          <span id="restLabel" class="rest-label">Pause</span>
+          <strong id="restTime">0:00</strong>
+        </div>
+        <button type="button" id="restPlus" class="rest-btn">+15</button>
+        <button type="button" id="restSkip" class="rest-btn">Weiter</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Allgemeine Eingabefenster (zweite Ebene für Auswahl innerhalb eines Fensters) -->
+  <dialog id="sheet1" class="sheet">
+    <div class="sheet-head">
+      <h2 class="sheet-title"></h2>
+      <button type="button" class="icon-btn sheet-close" aria-label="Schließen">✕</button>
+    </div>
+    <div class="sheet-body"></div>
+  </dialog>
+  <dialog id="sheet2" class="sheet">
+    <div class="sheet-head">
+      <h2 class="sheet-title"></h2>
+      <button type="button" class="icon-btn sheet-close" aria-label="Schließen">✕</button>
+    </div>
+    <div class="sheet-body"></div>
+  </dialog>
+
+  <div id="toast" class="toast" hidden>
+    <span id="toastText"></span>
+    <button type="button" id="toastUndo" class="toast-undo" hidden>Rückgängig</button>
+  </div>
+  <div id="chartTip" class="chart-tip" hidden></div>
+
+  <script src="../shared/sync-config.js"></script>
+  <script src="../shared/sync.js"></script>
+  <script src="vorlagen.js"></script>
+  <script src="daten.js"></script>
+  <script src="diagramme.js"></script>
+  <script src="app.js"></script>
+  <script src="heute.js"></script>
+  <script src="training.js"></script>
+  <script src="plan.js"></script>
+  <script src="ernaehrung.js"></script>
+  <script src="koerper.js"></script>
+  <script src="statistik.js"></script>
+  <script src="einstellungen.js"></script>
+  <script src="start.js"></script>
+</body>
+</html>

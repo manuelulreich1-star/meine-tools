@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/; connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="shared/schutz.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meine Tools</title>
+<link rel="stylesheet" href="shared/theme.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="hub-header">
+      <h1 class="gradient-title">Meine Tools</h1>
+      <p class="subtitle">Alles, was du dir bauen lässt, an einem Ort.</p>
+      <div class="hub-sync" data-sync-slot="full"></div>
+    </header>
+
+    <div id="toolGrid" class="tool-grid"></div>
+  </div>
+
+  <script src="shared/sync-config.js"></script>
+  <script src="shared/sync.js"></script>
+  <script src="kalender/vorlagen.js"></script>
+  <script src="kalender/vorlagen.lokal.js"></script>
+  <script src="kalender/daten.js"></script>
+  <script src="todo/vorlagen.js"></script>
+  <script src="todo/vorlagen.lokal.js"></script>
+  <script src="todo/daten.js"></script>
+  <script src="fitness/vorlagen.js"></script>
+  <script src="fitness/daten.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

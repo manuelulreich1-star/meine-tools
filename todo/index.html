@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/; connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<script src="../shared/schutz.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do-Liste</title>
+<link rel="stylesheet" href="../shared/theme.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <a href="../index.html" class="back-link">&#8592; Übersicht</a>
+
+    <header class="todo-header">
+      <h1 class="gradient-title">To-Do-Liste</h1>
+      <p id="summary" class="summary"></p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab-btn active" data-view="day" role="tab">Heute <span class="tab-count"></span></button>
+      <button type="button" class="tab-btn" data-view="week" role="tab">Woche <span class="tab-count"></span></button>
+      <button type="button" class="tab-btn" data-view="month" role="tab">Monat <span class="tab-count"></span></button>
+      <button type="button" class="tab-btn" data-view="all" role="tab">Alle <span class="tab-count"></span></button>
+    </nav>
+
+    <form id="addForm" class="add-form" autocomplete="off">
+      <input type="text" id="newTitle" placeholder="Neue Aufgabe…" maxlength="120" required>
+      <div class="add-options">
+        <label class="field">Wann
+          <select id="newWhen" class="when-select"></select>
+        </label>
+        <label class="field" id="newDateField" hidden>Datum
+          <input type="date" id="newDate">
+        </label>
+        <label class="field">Priorität
+          <select id="newPriority">
+            <option value="low">Niedrig</option>
+            <option value="medium" selected>Mittel</option>
+            <option value="high">Hoch</option>
+          </select>
+        </label>
+        <button type="submit" class="primary-btn">Hinzufügen</button>
+      </div>
+    </form>
+
+    <div class="list-toolbar">
+      <label class="toggle">
+        <input type="checkbox" id="showDone" checked>
+        Erledigte anzeigen
+      </label>
+      <input id="searchInput" type="search" placeholder="Suchen…">
+    </div>
+
+    <div id="sections"></div>
+    <p id="emptyState" class="empty-state" hidden></p>
+
+    <div class="list-footer">
+      <button type="button" id="clearDoneBtn" class="ghost-btn">Erledigte löschen</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden>
+    <span id="toastText"></span>
+    <button type="button" id="toastUndo" class="toast-undo">Rückgängig</button>
+  </div>
+
+  <!-- Bearbeiten -->
+  <dialog id="editDialog">
+    <form id="editForm" method="dialog">
+      <h2>Aufgabe bearbeiten</h2>
+      <label class="field">Titel
+        <input type="text" id="editTitle" required maxlength="120">
+      </label>
+      <div class="row">
+        <label class="field">Wann
+          <select id="editWhen" class="when-select"></select>
+        </label>
+        <label class="field" id="editDateField" hidden>Datum
+          <input type="date" id="editDate">
+        </label>
+      </div>
+      <label class="field">Priorität
+        <select id="editPriority">
+          <option value="low">Niedrig</option>
+          <option value="medium">Mittel</option>
+          <option value="high">Hoch</option>
+        </select>
+      </label>
+      <label class="field">Notiz
+        <textarea id="editNote" rows="3" maxlength="500" placeholder="Optional…"></textarea>
+      </label>
+      <p id="editPostponed" class="postponed-hint" hidden></p>
+      <div class="dialog-actions">
+        <button type="button" id="editDeleteBtn" class="danger-btn">Löschen</button>
+        <span class="spacer"></span>
+        <button type="button" id="editCancelBtn" class="ghost-btn">Abbrechen</button>
+        <button type="submit" class="primary-btn">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="../shared/sync-config.js"></script>
+  <script src="../shared/sync.js"></script>
+  <script src="vorlagen.js"></script>
+  <script src="vorlagen.lokal.js"></script>
+  <script src="daten.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
