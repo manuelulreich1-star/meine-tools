@@ -14,6 +14,7 @@ const DAY_SCROLL_HOUR = 7;
 const HOUR_HEIGHT = 44;          // muss zu .hour-row in style.css passen
 const DEFAULT_DURATION = 60;     // Anzeigedauer für Termine ohne Endzeit
 const MIN_BLOCK_HEIGHT = 22;
+const MOBILE_CHIPS = 3;          // sichtbare Termine pro Tag in der schmalen Monatsansicht
 
 let viewDate = new Date();
 viewDate.setDate(1);
@@ -117,7 +118,14 @@ function createChip(ev, key, term, withTime) {
 
   const text = document.createElement("span");
   text.className = "chip-text";
-  text.textContent = withTime && ev.time ? `${timeLabel(ev)} ${ev.title}` : ev.title;
+  if (withTime && ev.time) {
+    // Eigenes Element, damit die Uhrzeit auf schmalen Bildschirmen wegfallen kann.
+    const time = document.createElement("span");
+    time.className = "chip-time";
+    time.textContent = `${timeLabel(ev)} `;
+    text.appendChild(time);
+  }
+  text.append(ev.title);
   chip.appendChild(text);
 
   if (isRecurring(ev)) {
@@ -193,8 +201,10 @@ function renderMonth() {
       + (cell.outside ? " outside" : "")
       + (key === tKey ? " today" : "")
       + (isWeekend ? " weekend" : "")
-      + (ferien ? " ferien" : "");
+      + (ferien ? " ferien" : "")
+      + (holiday ? " holiday" : "");
     cellEl.dataset.date = key;
+    if (holiday) cellEl.title = holiday;
 
     const numEl = document.createElement("div");
     numEl.className = "day-num";
@@ -220,8 +230,18 @@ function renderMonth() {
       eventsEl.appendChild(badge);
     }
 
-    for (const ev of eventsOn(normalized)) {
-      eventsEl.appendChild(createChip(ev, key, term, true));
+    const dayEvents = eventsOn(normalized);
+    dayEvents.forEach((ev, i) => {
+      const chip = createChip(ev, key, term, true);
+      // Auf dem Handy nur die ersten Termine zeigen, der Rest steckt in „+N“.
+      if (i >= MOBILE_CHIPS) chip.classList.add("extra");
+      eventsEl.appendChild(chip);
+    });
+    if (dayEvents.length > MOBILE_CHIPS) {
+      const more = document.createElement("div");
+      more.className = "more-badge";
+      more.textContent = `+${dayEvents.length - MOBILE_CHIPS}`;
+      eventsEl.appendChild(more);
     }
 
     cellEl.appendChild(eventsEl);
