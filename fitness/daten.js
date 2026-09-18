@@ -65,6 +65,7 @@ window.FitnessDaten = (function () {
       active: null,
       body: {},
       foods: [],
+      recipes: [],
       meals: {},
     };
   }

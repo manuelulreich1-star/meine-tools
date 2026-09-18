@@ -22,6 +22,10 @@ const Einstellungen = (function () {
             <strong>🥫 Lebensmittel</strong>
             <small class="muted">${F.foods(state).length} Einträge</small>
           </button>
+          <button type="button" class="pick-item" data-act="recipes">
+            <strong>🍲 Meine Gerichte</strong>
+            <small class="muted">${Ernaehrung.recipeCount()} gespeichert</small>
+          </button>
           <button type="button" class="pick-item" data-act="templates">
             <strong>📋 Plan-Vorlagen</strong>
             <small class="muted">Push/Pull/Beine, Heimtraining, Lauf-Einsteiger</small>
@@ -36,6 +40,7 @@ const Einstellungen = (function () {
       on("goals", openGoals);
       on("exercises", openExercises);
       on("foods", () => Ernaehrung.manageFoods());
+      on("recipes", () => Ernaehrung.manageRecipes());
       on("templates", () => Plan.openTemplates());
       on("reset", () => App.confirmSheet(
         "Alle Fitnessdaten löschen?",

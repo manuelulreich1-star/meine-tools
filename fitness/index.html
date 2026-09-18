@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/; connect-src 'self' https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/; connect-src 'self' https://world.openfoodfacts.org https://www.googleapis.com https://oauth2.googleapis.com https://accounts.google.com/gsi/; frame-src https://accounts.google.com/gsi/; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <script src="../shared/schutz.js"></script>
@@ -79,6 +79,13 @@
     </div>
     <div class="sheet-body"></div>
   </dialog>
+  <dialog id="sheet3" class="sheet">
+    <div class="sheet-head">
+      <h2 class="sheet-title"></h2>
+      <button type="button" class="icon-btn sheet-close" aria-label="Schließen">✕</button>
+    </div>
+    <div class="sheet-body"></div>
+  </dialog>
 
   <div id="toast" class="toast" hidden>
     <span id="toastText"></span>
@@ -89,12 +96,14 @@
   <script src="../shared/sync-config.js"></script>
   <script src="../shared/sync.js"></script>
   <script src="vorlagen.js"></script>
+  <script src="lebensmittel.js"></script>
   <script src="daten.js"></script>
   <script src="diagramme.js"></script>
   <script src="app.js"></script>
   <script src="heute.js"></script>
   <script src="training.js"></script>
   <script src="plan.js"></script>
+  <script src="barcode.js"></script>
   <script src="ernaehrung.js"></script>
   <script src="koerper.js"></script>
   <script src="statistik.js"></script>

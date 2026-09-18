@@ -94,7 +94,7 @@ Fürs Handy gebaut, mit Tab-Leiste unten: **Heute · Plan · Ernährung · Körp
 - **Plan:** fester Wochenplan (Einheiten pro Wochentag, optional mit Uhrzeit), eigene Einheiten mit Sätzen/Wdh./Pause/Gewicht bzw. Dauer/Strecke. Vorlagen: Push/Pull/Beine, Heimtraining ohne Geräte, Lauf-Einsteiger
 - **Training (Live-Modus):** jeden Satz mit kg, Wdh. (oder Sekunden) und Anstrengung (RPE) abhaken, Pausen-Timer mit Ton/Vibration, Halte-Timer für Übungen auf Zeit, Stoppuhr, Werte vom letzten Mal, Steigerungsvorschlag (+kg bzw. +Wdh., wenn alles geschafft wurde und es nicht zu schwer war), Notiz beim Beenden. Ein laufendes Training übersteht das Neuladen der Seite. Nachtragen: Training starten und beim Beenden Datum und Dauer ändern
 - **Übungen:** rund 60 vorgegebene Übungen (Gym, Körpergewicht, Cardio) mit Ausführungshinweisen, eigene lassen sich ergänzen
-- **Ernährung:** Mahlzeiten mit kcal, Eiweiß, Kohlenhydraten und Fett, Lebensmittelliste (Richtwerte pro 100 g, eigene pro 100 g oder pro Portion), „Wie am Vortag“, Makroziele (Eiweiß 1,8 g/kg Zielgewicht, Fett 25 %)
+- **Ernährung:** Mahlzeiten mit kcal, Eiweiß, Kohlenhydraten und Fett, rund 240 Lebensmittel in 15 Kategorien (Richtwerte pro 100 g bzw. 100 ml, eigene pro 100 g oder pro Portion), Suche ohne Rücksicht auf Umlaute, Barcode-Scan per Handykamera (Chrome auf Android) oder Nummerneingabe mit Nährwerten aus Open Food Facts – gescannte Produkte werden gespeichert und beim nächsten Scan sofort erkannt, eigene Gerichte aus Zutaten (mit Portionen, auch direkt aus einer Mahlzeit „Als Gericht speichern“), „Wie am Vortag“, Makroziele (Eiweiß 1,8 g/kg Zielgewicht, Fett 25 %)
 - **Körper:** Gewicht, Körperfett, BMI, Schritte, Wasser, Schlaf mit Tageszielen, Zielprognose
 - **Statistik:** Serie, Wochenfortschritt, Gewichtsverlauf mit 7-Tage-Schnitt, Trainingstage als Heatmap, Fortschritt pro Übung (Bestwerte, geschätztes 1RM, Volumen, Pace), Kalorienbilanz, Trainingsverlauf
 - **Verknüpfungen:** Kachel-Zähler im Dashboard, geplante und erledigte Trainings erscheinen im Kalender (Klick öffnet den Fitnessplaner), `FitnessDaten.summary()` liefert Kennzahlen für die geplante Statistik-Kachel
@@ -105,12 +105,14 @@ Alle Daten liegen im `localStorage` unter `mein-fitness` (ein einziges Objekt).
 |---|---|
 | `fitness/index.html` | Aufbau: Tabs, Live-Training, Fenster |
 | `fitness/daten.js` | Laden/Speichern, Berechnungen (Kalorien, BMI, 1RM, Steigerung, Serie), Zähler fürs Dashboard, Termine für den Kalender |
-| `fitness/vorlagen.js` | Übungen, Plan-Vorlagen, Lebensmittel |
+| `fitness/vorlagen.js` | Übungen, Plan-Vorlagen |
+| `fitness/lebensmittel.js` | Mitgelieferte Lebensmittel mit Kategorien |
+| `fitness/barcode.js` | Barcode-Scanner (Kamera) und Abfrage bei Open Food Facts |
 | `fitness/app.js` | Grundgerüst: Navigation, Fenster, Hinweise, Hilfsfunktionen |
 | `fitness/heute.js` | Tab „Heute“ |
 | `fitness/training.js` | Laufendes Training mit Timern |
 | `fitness/plan.js` | Tab „Plan“, Vorlagen, Übungsauswahl, eigene Übungen |
-| `fitness/ernaehrung.js` | Tab „Ernährung“ und Lebensmittelverwaltung |
+| `fitness/ernaehrung.js` | Tab „Ernährung“, Lebensmittel- und Gerichteverwaltung |
 | `fitness/koerper.js` | Tab „Körper“ |
 | `fitness/statistik.js` | Tab „Statistik“ |
 | `fitness/diagramme.js` | SVG-Diagramme (Linie, Balken, Heatmap) ohne Bibliothek |
@@ -155,7 +157,7 @@ powershell -ExecutionPolicy Bypass -File veroeffentlichen.ps1                # d
 
 **Schutzmaßnahmen in den Seiten:**
 
-- Content-Security-Policy: Skripte nur von der eigenen Seite und von Googles Anmeldung, Datenverbindungen nur zu Google Drive, keine eingebetteten Fremdinhalte, keine Inline-Skripte
+- Content-Security-Policy: Skripte nur von der eigenen Seite und von Googles Anmeldung, Datenverbindungen nur zu Google Drive (im Fitnessplaner zusätzlich zu Open Food Facts für den Barcode-Scan, dabei wird nur die Barcode-Nummer gesendet), keine eingebetteten Fremdinhalte, keine Inline-Skripte
 - `shared/schutz.js`: Die Seiten bleiben leer, wenn eine fremde Seite sie einbettet (Schutz vor Clickjacking, weil GitHub Pages keine Header setzen kann)
 - `noindex`: Suchmaschinen sollen die Seiten nicht aufnehmen
 - Referrer nur als Adresse ohne Pfad, keine externen Schriftarten (keine Anfragen an Google Fonts)
